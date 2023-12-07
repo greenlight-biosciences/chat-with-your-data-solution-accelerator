@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "5821860698176728657"
+      "templateHash": "7234405731426501193"
     }
   },
   "parameters": {
@@ -302,13 +302,18 @@
       "metadata": {
         "description": "Container registry Password"
       }
+    },
+    "BlobContainerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Blob Container Name - (Team Specific)"
+      }
     }
   },
   "variables": {
     "WebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/adminwebapp",
     "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/webapp",
     "BackendImageName": "DOCKER|glbdmcontainer.azurecr.io/backend",
-    "BlobContainerName": "documents",
     "QueueName": "doc-processing",
     "ClientKey": "[format('{0}{1}', uniqueString(guid(resourceGroup().id, deployment().name)), parameters('newGuidString'))]",
     "EventGridSystemTopicName": "doc-processing"
@@ -495,7 +500,7 @@
             },
             {
               "name": "AZURE_BLOB_CONTAINER_NAME",
-              "value": "[variables('BlobContainerName')]"
+              "value": "[parameters('BlobContainerName')]"
             },
             {
               "name": "ORCHESTRATION_STRATEGY",
@@ -657,7 +662,7 @@
             },
             {
               "name": "AZURE_BLOB_CONTAINER_NAME",
-              "value": "[variables('BlobContainerName')]"
+              "value": "[parameters('BlobContainerName')]"
             },
             {
               "name": "DOCUMENT_PROCESSING_QUEUE_NAME",
@@ -707,7 +712,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2021-08-01",
-      "name": "[format('{0}/default/{1}', parameters('StorageAccountName'), variables('BlobContainerName'))]",
+      "name": "[format('{0}/default/{1}', parameters('StorageAccountName'), parameters('BlobContainerName'))]",
       "properties": {
         "publicAccess": "None"
       }
@@ -832,7 +837,7 @@
             },
             {
               "name": "AZURE_BLOB_CONTAINER_NAME",
-              "value": "[variables('BlobContainerName')]"
+              "value": "[parameters('BlobContainerName')]"
             },
             {
               "name": "AZURE_FORM_RECOGNIZER_ENDPOINT",
@@ -964,7 +969,7 @@
             "Microsoft.Storage.BlobDeleted"
           ],
           "enableAdvancedFilteringOnArrays": true,
-          "subjectBeginsWith": "[format('/blobServices/default/containers/{0}/blobs/', variables('BlobContainerName'))]"
+          "subjectBeginsWith": "[format('/blobServices/default/containers/{0}/blobs/', parameters('BlobContainerName'))]"
         },
         "labels": [],
         "eventDeliverySchema": "EventGridSchema",

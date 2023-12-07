@@ -140,17 +140,15 @@ param registryUsername string
 @description('Container registry Password')
 param registryPassword string
 
+@description('Blob Container Name - (Team Specific)')
+param BlobContainerName string
+
 var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
 var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/webapp'
 var BackendImageName = 'DOCKER|glbdmcontainer.azurecr.io/backend'
-var BlobContainerName = 'documents'
 var QueueName = 'doc-processing'
 var ClientKey = '${uniqueString(guid(resourceGroup().id, deployment().name))}${newGuidString}'
 var EventGridSystemTopicName = 'doc-processing'
-
-resource AzureCognitiveSearch_resource 'Microsoft.Search/searchServices@2022-09-01' existing = {
-  name: AzureCognitiveSearch
-}
 
 resource FormRecognizer 'Microsoft.CognitiveServices/accounts@2022-12-01' = {
   name: FormRecognizerName

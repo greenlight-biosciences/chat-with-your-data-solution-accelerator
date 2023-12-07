@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "6225439783988414033"
+      "templateHash": "5821860698176728657"
     }
   },
   "parameters": {
@@ -233,20 +233,6 @@
         "description": "Azure AI Search Resource"
       }
     },
-    "AzureCognitiveSearchSku": {
-      "type": "string",
-      "defaultValue": "standard",
-      "allowedValues": [
-        "free",
-        "basic",
-        "standard",
-        "standard2",
-        "standard3"
-      ],
-      "metadata": {
-        "description": "The SKU of the search service you want to create. E.g. free or standard"
-      }
-    },
     "AzureSearchIndex": {
       "type": "string",
       "defaultValue": "[format('{0}-index', parameters('ResourcePrefix'))]",
@@ -263,7 +249,7 @@
     },
     "StorageAccountName": {
       "type": "string",
-      "defaultValue": "[substring(format('{0}str{1}', parameters('ResourcePrefix'), uniqueString(resourceGroup().id)), 0, 24)]",
+      "defaultValue": "[format('{0}str', parameters('ResourcePrefix'))]",
       "metadata": {
         "description": "Name of Storage Account"
       }
@@ -298,34 +284,36 @@
     "newGuidString": {
       "type": "string",
       "defaultValue": "[newGuid()]"
+    },
+    "registryUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Container registry Url"
+      }
+    },
+    "registryUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Container registry Username"
+      }
+    },
+    "registryPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Container registry Password"
+      }
     }
   },
   "variables": {
-    "WebAppImageName": "DOCKER|fruoccopublic.azurecr.io/rag-webapp",
-    "AdminWebAppImageName": "DOCKER|fruoccopublic.azurecr.io/rag-adminwebapp",
-    "BackendImageName": "DOCKER|fruoccopublic.azurecr.io/rag-backend",
+    "WebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/adminwebapp",
+    "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/webapp",
+    "BackendImageName": "DOCKER|glbdmcontainer.azurecr.io/backend",
     "BlobContainerName": "documents",
     "QueueName": "doc-processing",
     "ClientKey": "[format('{0}{1}', uniqueString(guid(resourceGroup().id, deployment().name)), parameters('newGuidString'))]",
     "EventGridSystemTopicName": "doc-processing"
   },
   "resources": [
-    {
-      "type": "Microsoft.Search/searchServices",
-      "apiVersion": "2022-09-01",
-      "name": "[parameters('AzureCognitiveSearch')]",
-      "location": "[parameters('Location')]",
-      "tags": {
-        "deployment": "chatwithyourdata-sa"
-      },
-      "sku": {
-        "name": "[parameters('AzureCognitiveSearchSku')]"
-      },
-      "properties": {
-        "replicaCount": 1,
-        "partitionCount": 1
-      }
-    },
     {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2022-12-01",
@@ -520,6 +508,18 @@
             {
               "name": "AZURE_CONTENT_SAFETY_KEY",
               "value": "[listKeys(format('Microsoft.CognitiveServices/accounts/{0}', parameters('ContentSafetyName')), '2023-05-01').key1]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_URL",
+              "value": "[parameters('registryUrl')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+              "value": "[parameters('registryUsername')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+              "value": "[parameters('registryPassword')]"
             }
           ],
           "linuxFxVersion": "[variables('WebAppImageName')]"
@@ -527,8 +527,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
       ]
     },
     {
@@ -683,6 +682,18 @@
             {
               "name": "AZURE_CONTENT_SAFETY_KEY",
               "value": "[listKeys(format('Microsoft.CognitiveServices/accounts/{0}', parameters('ContentSafetyName')), '2023-05-01').key1]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_URL",
+              "value": "[parameters('registryUrl')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+              "value": "[parameters('registryUsername')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+              "value": "[parameters('registryPassword')]"
             }
           ],
           "linuxFxVersion": "[variables('AdminWebAppImageName')]"
@@ -690,19 +701,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
       ]
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2021-08-01",
-      "name": "[parameters('StorageAccountName')]",
-      "location": "[parameters('Location')]",
-      "kind": "StorageV2",
-      "sku": {
-        "name": "Standard_GRS"
-      }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -710,10 +710,7 @@
       "name": "[format('{0}/default/{1}', parameters('StorageAccountName'), variables('BlobContainerName'))]",
       "properties": {
         "publicAccess": "None"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -721,10 +718,7 @@
       "name": "[format('{0}/default/config', parameters('StorageAccountName'))]",
       "properties": {
         "publicAccess": "None"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices",
@@ -734,10 +728,7 @@
         "cors": {
           "corsRules": []
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
@@ -882,6 +873,18 @@
             {
               "name": "AZURE_CONTENT_SAFETY_KEY",
               "value": "[listKeys(format('Microsoft.CognitiveServices/accounts/{0}', parameters('ContentSafetyName')), '2023-05-01').key1]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_URL",
+              "value": "[parameters('registryUrl')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+              "value": "[parameters('registryUsername')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+              "value": "[parameters('registryPassword')]"
             }
           ],
           "cors": {
@@ -900,8 +903,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
       ]
     },
     {
@@ -941,10 +943,7 @@
       "properties": {
         "source": "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
         "topicType": "Microsoft.Storage.StorageAccounts"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
@@ -976,7 +975,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.EventGrid/systemTopics', variables('EventGridSystemTopicName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/queueServices/queues', parameters('StorageAccountName'), 'default', 'doc-processing')]"
       ]
     }

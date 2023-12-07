@@ -107,15 +107,6 @@ param AzureOpenAIEmbeddingModel string = 'text-embedding-ada-002'
 @description('Azure AI Search Resource')
 param AzureCognitiveSearch string = '${ResourcePrefix}-search'
 
-@description('The SKU of the search service you want to create. E.g. free or standard')
-@allowed([
-  'free'
-  'basic'
-  'standard'
-  'standard2'
-  'standard3'
-])
-param AzureCognitiveSearchSku string = 'standard'
 
 @description('Azure AI Search Index')
 param AzureSearchIndex string = '${ResourcePrefix}-index'
@@ -139,27 +130,26 @@ param FormRecognizerLocation string
 param ContentSafetyName string = '${ResourcePrefix}-contentsafety'
 param newGuidString string = newGuid()
 
-var WebAppImageName = 'DOCKER|fruoccopublic.azurecr.io/rag-webapp'
-var AdminWebAppImageName = 'DOCKER|fruoccopublic.azurecr.io/rag-adminwebapp'
-var BackendImageName = 'DOCKER|fruoccopublic.azurecr.io/rag-backend'
+@description('Container registry Url')
+param registryUrl string
+
+@description('Container registry Username')
+param registryUsername string
+
+@secure()
+@description('Container registry Password')
+param registryPassword string
+
+var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
+var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/webapp'
+var BackendImageName = 'DOCKER|glbdmcontainer.azurecr.io/backend'
 var BlobContainerName = 'documents'
 var QueueName = 'doc-processing'
 var ClientKey = '${uniqueString(guid(resourceGroup().id, deployment().name))}${newGuidString}'
 var EventGridSystemTopicName = 'doc-processing'
 
-resource AzureCognitiveSearch_resource 'Microsoft.Search/searchServices@2022-09-01' = {
+resource AzureCognitiveSearch_resource 'Microsoft.Search/searchServices@2022-09-01' existing = {
   name: AzureCognitiveSearch
-  location: Location
-  tags: {
-    deployment : 'chatwithyourdata-sa'
-  }
-  sku: {
-    name: AzureCognitiveSearchSku
-  }
-  properties: {
-    replicaCount: 1
-    partitionCount: 1
-  }
 }
 
 resource FormRecognizer 'Microsoft.CognitiveServices/accounts@2022-12-01' = {
@@ -253,6 +243,9 @@ resource Website 'Microsoft.Web/sites@2020-06-01' = {
         { name: 'ORCHESTRATION_STRATEGY', value: OrchestrationStrategy}
         { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: 'https://${Location}.api.cognitive.microsoft.com/'}
         { name: 'AZURE_CONTENT_SAFETY_KEY', value: listKeys('Microsoft.CognitiveServices/accounts/${ContentSafetyName}', '2023-05-01').key1}
+        { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
+        { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
+        { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
       ]
       linuxFxVersion: WebAppImageName
     }
@@ -305,6 +298,9 @@ resource WebsiteName_admin 'Microsoft.Web/sites@2020-06-01' = {
         { name: 'ORCHESTRATION_STRATEGY', value: OrchestrationStrategy}
         { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: 'https://${Location}.api.cognitive.microsoft.com/'}
         { name: 'AZURE_CONTENT_SAFETY_KEY', value: listKeys('Microsoft.CognitiveServices/accounts/${ContentSafetyName}', '2023-05-01').key1}
+        { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
+        { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
+        { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
       ]
       linuxFxVersion: AdminWebAppImageName
     }
@@ -314,13 +310,8 @@ resource WebsiteName_admin 'Microsoft.Web/sites@2020-06-01' = {
   ]
 }
 
-resource StorageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
+resource StorageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' existing  = {
   name: StorageAccountName
-  location: Location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_GRS'
-  }
 }
 
 resource StorageAccountName_default_BlobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
@@ -424,6 +415,9 @@ resource Function 'Microsoft.Web/sites@2018-11-01' = {
         { name: 'ORCHESTRATION_STRATEGY', value: OrchestrationStrategy}
         { name: 'AZURE_CONTENT_SAFETY_ENDPOINT', value: 'https://${Location}.api.cognitive.microsoft.com/'}
         { name: 'AZURE_CONTENT_SAFETY_KEY', value: listKeys('Microsoft.CognitiveServices/accounts/${ContentSafetyName}', '2023-05-01').key1}
+        { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
+        { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
+        { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
       ]
       cors: {
         allowedOrigins: [

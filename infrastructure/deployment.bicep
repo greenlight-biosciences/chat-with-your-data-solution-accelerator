@@ -1,6 +1,9 @@
 @description('provide a 2-13 character prefix for all resources.')
 param ResourcePrefix string
 
+@description('Team who will Use the app')
+param TeamName string
+
 @description('Location for all resources.')
 param Location string = resourceGroup().location
 
@@ -25,7 +28,7 @@ param HostingPlanName string = '${ResourcePrefix}-hosting-plan'
 param HostingPlanSku string = 'B3'
 
 @description('Name of Web App')
-param WebsiteName string = ResourcePrefix
+param WebsiteName string = '${ResourcePrefix}-${TeamName}'
 
 @description('Name of Log Analytics Workspace for App Insights')
 param logAnalyticsWorkspaceName string = '${ResourcePrefix}-loganalytics'
@@ -107,15 +110,11 @@ param AzureOpenAIEmbeddingModel string = 'text-embedding-ada-002'
 @description('Azure AI Search Resource')
 param AzureCognitiveSearch string
 
-
 @description('Azure AI Search Index')
 param AzureSearchIndex string = '${ResourcePrefix}-index'
 
 @description('Azure AI Search Conversation Log Index')
 param AzureSearchConversationLogIndex string = 'conversations'
-
-@description('Name of Storage Account')
-param StorageAccountName string
 
 @description('Name of Function App for Batch document processing')
 param FunctionName string = '${ResourcePrefix}-backend'
@@ -140,8 +139,12 @@ param registryUsername string
 @description('Container registry Password')
 param registryPassword string
 
+@description('Name of Storage Account')
+param StorageAccountName string = '${ResourcePrefix}-${TeamName}-str'
+
 @description('Blob Container Name - (Team Specific)')
-param BlobContainerName string
+param BlobContainerName string = '${ResourcePrefix}-${TeamName}-container'
+
 
 var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
 var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptwebapp'
@@ -340,6 +343,7 @@ resource StorageAccountName_default 'Microsoft.Storage/storageAccounts/queueServ
       corsRules: []
     }
   }
+  
 }
 
 resource StorageAccountName_default_doc_processing 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-09-01' = {

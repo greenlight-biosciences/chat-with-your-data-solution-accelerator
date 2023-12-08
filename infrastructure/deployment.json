@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "2826821777831638859"
+      "templateHash": "9082034230935735384"
     }
   },
   "parameters": {
@@ -13,6 +13,12 @@
       "type": "string",
       "metadata": {
         "description": "provide a 2-13 character prefix for all resources."
+      }
+    },
+    "TeamName": {
+      "type": "string",
+      "metadata": {
+        "description": "Team who will Use the app"
       }
     },
     "Location": {
@@ -52,7 +58,7 @@
     },
     "WebsiteName": {
       "type": "string",
-      "defaultValue": "[parameters('ResourcePrefix')]",
+      "defaultValue": "[format('{0}-{1}', parameters('ResourcePrefix'), parameters('TeamName'))]",
       "metadata": {
         "description": "Name of Web App"
       }
@@ -246,12 +252,6 @@
         "description": "Azure AI Search Conversation Log Index"
       }
     },
-    "StorageAccountName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of Storage Account"
-      }
-    },
     "FunctionName": {
       "type": "string",
       "defaultValue": "[format('{0}-backend', parameters('ResourcePrefix'))]",
@@ -301,8 +301,16 @@
         "description": "Container registry Password"
       }
     },
+    "StorageAccountName": {
+      "type": "string",
+      "defaultValue": "[format('{0}-{1}-str', parameters('ResourcePrefix'), parameters('TeamName'))]",
+      "metadata": {
+        "description": "Name of Storage Account"
+      }
+    },
     "BlobContainerName": {
       "type": "string",
+      "defaultValue": "[format('{0}-{1}-container', parameters('ResourcePrefix'), parameters('TeamName'))]",
       "metadata": {
         "description": "Blob Container Name - (Team Specific)"
       }

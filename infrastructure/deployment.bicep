@@ -25,7 +25,7 @@ param HostingPlanName string = '${ResourcePrefix}-hosting-plan'
 param HostingPlanSku string = 'B3'
 
 @description('Name of Web App')
-param WebsiteName string = '${ResourcePrefix}-website'
+param WebsiteName string = ResourcePrefix
 
 @description('Name of Log Analytics Workspace for App Insights')
 param logAnalyticsWorkspaceName string = '${ResourcePrefix}-loganalytics'
@@ -46,7 +46,7 @@ param AzureSearchIndexIsPrechunked string = 'false'
 param AzureSearchTopK string = '5'
 
 @description('Enable in domain')
-param AzureSearchEnableInDomain string = 'false'
+param AzureSearchEnableInDomain string = 'true'
 
 @description('Content columns')
 param AzureSearchContentColumns string = 'content'
@@ -93,7 +93,7 @@ param AzureOpenAIMaxTokens string = '1000'
 param AzureOpenAIStopSequence string = '\n'
 
 @description('Azure OpenAI System Message')
-param AzureOpenAISystemMessage string = 'You are an AI assistant that helps people find information.'
+param AzureOpenAISystemMessage string = 'You are a chatbot Assistant by the name of G.E.N.I.E (Greenlights Experiential kNowledge Innovation Entity). You help the company Greenlight Bioscience and its employees with general questions, questions about scientific papers, questions about the employee handbook and questions about scientific experiments recorded in their Electronic Lab Notebook (ELN).'
 
 @description('Azure OpenAI Api Version')
 param AzureOpenAIApiVersion string = '2023-07-01-preview'
@@ -105,7 +105,7 @@ param AzureOpenAIStream string = 'true'
 param AzureOpenAIEmbeddingModel string = 'text-embedding-ada-002'
 
 @description('Azure AI Search Resource')
-param AzureCognitiveSearch string = '${ResourcePrefix}-search'
+param AzureCognitiveSearch string
 
 
 @description('Azure AI Search Index')
@@ -115,7 +115,7 @@ param AzureSearchIndex string = '${ResourcePrefix}-index'
 param AzureSearchConversationLogIndex string = 'conversations'
 
 @description('Name of Storage Account')
-param StorageAccountName string = '${ResourcePrefix}str'
+param StorageAccountName string
 
 @description('Name of Function App for Batch document processing')
 param FunctionName string = '${ResourcePrefix}-backend'
@@ -144,8 +144,8 @@ param registryPassword string
 param BlobContainerName string
 
 var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
-var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/webapp'
-var BackendImageName = 'DOCKER|glbdmcontainer.azurecr.io/backend'
+var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptwebapp'
+var BackendImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptbackend'
 var QueueName = 'doc-processing'
 var ClientKey = '${uniqueString(guid(resourceGroup().id, deployment().name))}${newGuidString}'
 var EventGridSystemTopicName = 'doc-processing'

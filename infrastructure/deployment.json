@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "7234405731426501193"
+      "templateHash": "2826821777831638859"
     }
   },
   "parameters": {
@@ -52,7 +52,7 @@
     },
     "WebsiteName": {
       "type": "string",
-      "defaultValue": "[format('{0}-website', parameters('ResourcePrefix'))]",
+      "defaultValue": "[parameters('ResourcePrefix')]",
       "metadata": {
         "description": "Name of Web App"
       }
@@ -101,7 +101,7 @@
     },
     "AzureSearchEnableInDomain": {
       "type": "string",
-      "defaultValue": "false",
+      "defaultValue": "true",
       "metadata": {
         "description": "Enable in domain"
       }
@@ -200,7 +200,7 @@
     },
     "AzureOpenAISystemMessage": {
       "type": "string",
-      "defaultValue": "You are an AI assistant that helps people find information.",
+      "defaultValue": "You are a chatbot Assistant by the name of G.E.N.I.E (Greenlights Experiential kNowledge Innovation Entity). You help the company Greenlight Bioscience and its employees with general questions, questions about scientific papers, questions about the employee handbook and questions about scientific experiments recorded in their Electronic Lab Notebook (ELN).",
       "metadata": {
         "description": "Azure OpenAI System Message"
       }
@@ -228,7 +228,6 @@
     },
     "AzureCognitiveSearch": {
       "type": "string",
-      "defaultValue": "[format('{0}-search', parameters('ResourcePrefix'))]",
       "metadata": {
         "description": "Azure AI Search Resource"
       }
@@ -249,7 +248,6 @@
     },
     "StorageAccountName": {
       "type": "string",
-      "defaultValue": "[format('{0}str', parameters('ResourcePrefix'))]",
       "metadata": {
         "description": "Name of Storage Account"
       }
@@ -312,8 +310,8 @@
   },
   "variables": {
     "WebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/adminwebapp",
-    "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/webapp",
-    "BackendImageName": "DOCKER|glbdmcontainer.azurecr.io/backend",
+    "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/gptwebapp",
+    "BackendImageName": "DOCKER|glbdmcontainer.azurecr.io/gptbackend",
     "QueueName": "doc-processing",
     "ClientKey": "[format('{0}{1}', uniqueString(guid(resourceGroup().id, deployment().name)), parameters('newGuidString'))]",
     "EventGridSystemTopicName": "doc-processing"

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "7724056671425258551"
+      "templateHash": "11449578997489100907"
     }
   },
   "parameters": {
@@ -79,7 +79,7 @@
     },
     "AzureSearchUseSemanticSearch": {
       "type": "string",
-      "defaultValue": "false",
+      "defaultValue": "true",
       "metadata": {
         "description": "Use semantic search"
       }

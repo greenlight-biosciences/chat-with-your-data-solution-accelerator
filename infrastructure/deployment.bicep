@@ -37,7 +37,7 @@ param logAnalyticsWorkspaceName string = '${ResourcePrefix}-loganalytics'
 param ApplicationInsightsName string = '${ResourcePrefix}-appinsights'
 
 @description('Use semantic search')
-param AzureSearchUseSemanticSearch string = 'false'
+param AzureSearchUseSemanticSearch string = 'true'
 
 @description('Semantic search config')
 param AzureSearchSemanticSearchConfig string = 'default'

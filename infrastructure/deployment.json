@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "9273230404122341505"
+      "templateHash": "7724056671425258551"
     }
   },
   "parameters": {
@@ -303,14 +303,14 @@
     },
     "StorageAccountName": {
       "type": "string",
-      "defaultValue": "[format('{0}-{1}-str', parameters('ResourcePrefix'), parameters('TeamName'))]",
+      "defaultValue": "[format('{0}{1}str', parameters('ResourcePrefix'), parameters('TeamName'))]",
       "metadata": {
         "description": "Name of Storage Account"
       }
     },
     "BlobContainerName": {
       "type": "string",
-      "defaultValue": "[format('{0}-{1}-container', parameters('ResourcePrefix'), parameters('TeamName'))]",
+      "defaultValue": "[format('{0}{1}cnt', parameters('ResourcePrefix'), parameters('TeamName'))]",
       "metadata": {
         "description": "Blob Container Name - (Team Specific)"
       }

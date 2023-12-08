@@ -140,10 +140,10 @@ param registryUsername string
 param registryPassword string
 
 @description('Name of Storage Account')
-param StorageAccountName string = '${ResourcePrefix}-${TeamName}-str'
+param StorageAccountName string = '${ResourcePrefix}${TeamName}str'
 
 @description('Blob Container Name - (Team Specific)')
-param BlobContainerName string = '${ResourcePrefix}-${TeamName}-container'
+param BlobContainerName string = '${ResourcePrefix}${TeamName}cnt'
 
 
 var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'

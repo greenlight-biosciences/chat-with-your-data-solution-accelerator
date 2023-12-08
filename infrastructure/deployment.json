@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "11449578997489100907"
+      "templateHash": "16453908494729395295"
     }
   },
   "parameters": {
@@ -238,6 +238,12 @@
         "description": "Azure AI Search Resource"
       }
     },
+    "AzureCognitiveSearchKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure AI Search Key"
+      }
+    },
     "AzureSearchIndex": {
       "type": "string",
       "defaultValue": "[format('{0}-index', parameters('ResourcePrefix'))]",
@@ -406,7 +412,7 @@
             },
             {
               "name": "AZURE_SEARCH_KEY",
-              "value": "[listAdminKeys(format('Microsoft.Search/searchServices/{0}', parameters('AzureCognitiveSearch')), '2021-04-01-preview').primaryKey]"
+              "value": "[parameters('AzureCognitiveSearchKey')]"
             },
             {
               "name": "AZURE_SEARCH_SEMANTIC_SEARCH_CONFIG",
@@ -561,7 +567,7 @@
             },
             {
               "name": "AZURE_SEARCH_KEY",
-              "value": "[listAdminKeys(format('Microsoft.Search/searchServices/{0}', parameters('AzureCognitiveSearch')), '2021-04-01-preview').primaryKey]"
+              "value": "[parameters('AzureCognitiveSearchKey')]"
             },
             {
               "name": "AZURE_SEARCH_INDEX",
@@ -880,7 +886,7 @@
             },
             {
               "name": "AZURE_SEARCH_KEY",
-              "value": "[listAdminKeys(format('Microsoft.Search/searchServices/{0}', parameters('AzureCognitiveSearch')), '2021-04-01-preview').primaryKey]"
+              "value": "[parameters('AzureCognitiveSearchKey')]"
             },
             {
               "name": "DOCUMENT_PROCESSING_QUEUE_NAME",

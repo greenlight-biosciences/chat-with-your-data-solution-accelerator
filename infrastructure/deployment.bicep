@@ -311,8 +311,13 @@ resource WebsiteName_admin 'Microsoft.Web/sites@2020-06-01' = {
   ]
 }
 
-resource StorageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' existing  = {
+resource StorageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: StorageAccountName
+  location: Location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_GRS'
+  }
 }
 
 resource StorageAccountName_default_BlobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.23.1.45101",
-      "templateHash": "9082034230935735384"
+      "templateHash": "9273230404122341505"
     }
   },
   "parameters": {
@@ -538,7 +538,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
       ]
     },
     {
@@ -712,8 +713,19 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
       ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-08-01",
+      "name": "[parameters('StorageAccountName')]",
+      "location": "[parameters('Location')]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_GRS"
+      }
     },
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -721,7 +733,10 @@
       "name": "[format('{0}/default/{1}', parameters('StorageAccountName'), parameters('BlobContainerName'))]",
       "properties": {
         "publicAccess": "None"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
     },
     {
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -729,7 +744,10 @@
       "name": "[format('{0}/default/config', parameters('StorageAccountName'))]",
       "properties": {
         "publicAccess": "None"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
     },
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices",
@@ -739,7 +757,10 @@
         "cors": {
           "corsRules": []
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
     },
     {
       "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
@@ -914,7 +935,8 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', parameters('ApplicationInsightsName'))]",
-        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('HostingPlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
       ]
     },
     {
@@ -954,7 +976,10 @@
       "properties": {
         "source": "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
         "topicType": "Microsoft.Storage.StorageAccounts"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+      ]
     },
     {
       "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
@@ -986,6 +1011,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.EventGrid/systemTopics', variables('EventGridSystemTopicName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts/queueServices/queues', parameters('StorageAccountName'), 'default', 'doc-processing')]"
       ]
     }

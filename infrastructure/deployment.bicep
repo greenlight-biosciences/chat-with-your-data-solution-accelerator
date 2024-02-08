@@ -150,8 +150,8 @@ param StorageAccountName string = '${ResourcePrefix}${TeamName}str'
 param BlobContainerName string = '${ResourcePrefix}${TeamName}cnt'
 
 
-var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
-var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptwebapp'
+var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptwebapp'
+var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
 var BackendImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptbackend'
 var QueueName = 'doc-processing'
 var ClientKey = '${uniqueString(guid(resourceGroup().id, deployment().name))}${newGuidString}'

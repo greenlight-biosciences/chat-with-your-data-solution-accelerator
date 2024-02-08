@@ -9,6 +9,16 @@ const Layout = () => {
     const [isSharePanelOpen, setIsSharePanelOpen] = useState<boolean>(false);
     const [copyClicked, setCopyClicked] = useState<boolean>(false);
     const [copyText, setCopyText] = useState<string>("Copy URL");
+    const [pageTitle, setPageTitle] = useState<string>('Default Title');
+
+    useEffect(() => {
+        const envTitle = import.meta.env.VITE_APP_TITLE || 'CONTACT DmTEAM - ENV MISSING';
+        setPageTitle(envTitle)
+        document.title = envTitle;
+
+        const envColor = import.meta.env.VITE_APP_COLOR || '#f2f2f2';
+        document.documentElement.style.setProperty('--header-background-color', envColor);
+    }, []);
 
     const handleShareClick = () => {
         setIsSharePanelOpen(true);
@@ -42,7 +52,7 @@ const Layout = () => {
                             aria-hidden="true"
                         />
                         <Link to="/" className={styles.headerTitleContainer}>
-                            <h3 className={styles.headerTitle}>Azure AI</h3>
+                            <h3 className={styles.headerTitle}>{pageTitle}</h3>
                         </Link>
                         <div className={styles.shareButtonContainer} role="button" tabIndex={0} aria-label="Share" onClick={handleShareClick} onKeyDown={e => e.key === "Enter" || e.key === " " ? handleShareClick() : null}>
                             <ShareRegular className={styles.shareButton} />

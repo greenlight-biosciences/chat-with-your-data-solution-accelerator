@@ -1,5 +1,18 @@
 # "Chat with your data" Solution Accelerator  
 
+## GLB Modifications
+
+
+### Frontend .env file
+- Documentation: https://vitejs.dev/guide/env-and-mode.html
+- Uses the file `code/app/frontend/.env` to hold variables the Vite frontend can access.
+    1. Rename `example.env` to `.env` otherwise the variables will not be read.
+    2. The env variables *must* start with `VITE_` otherwise they will not be read, e.g. `VITE_MY_SECRET`.
+
+
+
+
+## Original README
 > [!IMPORTANT]  
 > As of November 15, 2023, Azure Cognitive Search has been renamed to Azure AI Search.
 

@@ -10,13 +10,16 @@ import requests
 from azure.storage.blob import BlobServiceClient, generate_blob_sas, ContentSettings
 import urllib.parse
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from getImageFromURL import getImageFromURL
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utilities.helpers.ConfigHelper import ConfigHelper
 from dotenv import load_dotenv
 load_dotenv()
 
 logger = logging.getLogger('azure.core.pipeline.policies.http_logging_policy').setLevel(logging.WARNING)
-st.set_page_config(page_title="Ingest Data", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
+# st.set_page_config(page_title="Ingest Data", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
+st.set_page_config(page_title="Ingest Data", page_icon=getImageFromURL(os.getenv('FAVICON_URL')), layout="wide", menu_items=None)
+
 mod_page_style = """
             <style>
             #MainMenu {visibility: hidden;}

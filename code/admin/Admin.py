@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import logging
 from dotenv import load_dotenv
+from getImageFromURL import getImageFromURL
 load_dotenv()
 
 import sys
@@ -11,7 +12,8 @@ logger = logging.getLogger('azure.core.pipeline.policies.http_logging_policy').s
 
 
 
-st.set_page_config(page_title="Admin", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
+# st.set_page_config(page_title="Admin", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
+st.set_page_config(page_title="Admin", page_icon=getImageFromURL(os.getenv('FAVICON_URL')), layout="wide", menu_items=None)
 
 mod_page_style = """
             <style>
@@ -25,7 +27,8 @@ st.markdown(mod_page_style, unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1,2,1])
 with col1:
-    st.image(os.path.join('images','logo.png'))
+    # st.image(os.path.join('images','logo.png'))
+    st.image(getImageFromURL(os.getenv('LOGO_URL')))
     
 st.write("# Chat with your data Solution Accelerator")
 

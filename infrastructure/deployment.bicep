@@ -251,6 +251,9 @@ resource Website 'Microsoft.Web/sites@2020-06-01' = {
         { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
         { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
         { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
+        { name: 'LOGO_URL', value: 'https://www.greenlightbiosciences.com/wp-content/themes/greenlight-v2/theme/img/GreenLightLogo.png'}
+        { name: 'FAVICON_URL', value: 'https://www.greenlightbiosciences.com/favicon-32x32.png'}
+        { name: 'CONFIG_PASSWORD', value: 'Hello123!'}
       ]
       linuxFxVersion: WebAppImageName
     }

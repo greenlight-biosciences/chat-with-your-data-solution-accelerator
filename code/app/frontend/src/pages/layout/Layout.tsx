@@ -10,14 +10,68 @@ const Layout = () => {
     const [copyClicked, setCopyClicked] = useState<boolean>(false);
     const [copyText, setCopyText] = useState<string>("Copy URL");
     const [pageTitle, setPageTitle] = useState<string>('Default Title');
+    const [logoHeaderURL, setLogoHeaderURL] = useState<string>('');
 
     useEffect(() => {
-        const envTitle = import.meta.env.VITE_APP_TITLE || 'CONTACT DmTEAM - ENV MISSING';
-        setPageTitle(envTitle)
-        document.title = envTitle;
+        const logo_header_url = import.meta.env.VITE_GLB_LOGO_HEADER_URL;
+        setLogoHeaderURL(logo_header_url)
 
-        const envColor = import.meta.env.VITE_APP_COLOR || '#f2f2f2';
-        document.documentElement.style.setProperty('--header-background-color', envColor);
+        const envTeam = import.meta.env.VITE_TEAM;
+        let page_title;
+        let theme_color1;
+        let theme_color2, theme_color3, theme_color4;
+
+        switch (envTeam.toLowerCase()) {
+            case "data_science":
+                page_title = "GENIE - Data Science";
+                theme_color1 = "#CEFEE4";
+                theme_color2 = "#9FFDCB";
+                theme_color3 = "#2BEDA6";
+                theme_color4 = "#00B57F";
+                break;
+            case "data_management":
+                page_title = "GENIE - Data Management";
+                theme_color1 = "#FCF3CA";
+                theme_color2 = "#FFE691";
+                theme_color3 = "#FFC91C";
+                theme_color4 = "#D19428";
+                break;
+            case "process_dev":
+                page_title = "GENIE - Process Development";
+                theme_color1 = "#D3F7FE";
+                theme_color2 = "#A4EDFD";
+                theme_color3 = "#35E1F2";
+                theme_color4 = "#00A2B3";
+                break;
+            case "product_dev":
+                page_title = "GENIE - Product Development";
+                theme_color1 = "#EBE3FF";
+                theme_color2 = "#CCB8FF";
+                theme_color3 = "#8C59FF";
+                theme_color4 = "#4D21B2";
+                break;
+            case "regulatory":
+                page_title = "GENIE - Regulatory";
+                theme_color1 = "#FFDEFC";
+                theme_color2 = "#FFB0F8";
+                theme_color3 = "#F046DD";
+                theme_color4 = "#B3009A";
+                break;
+            default:
+                page_title = "<{ERROR}> CONTACT DM TEAM! <{ERROR}>";
+                theme_color1 = "#ff0000";
+                theme_color2 = "#ff0000";
+                theme_color3 = "#ff0000";
+                theme_color4 = "#ff0000";
+                break;
+        }
+
+        setPageTitle(page_title)
+        document.title = page_title;
+        document.documentElement.style.setProperty("--header-background-color", theme_color2);
+        document.documentElement.style.setProperty("--gradient-color1",         theme_color4);
+        document.documentElement.style.setProperty("--gradient-color2",         theme_color3);
+        document.documentElement.style.setProperty("--gradient-color3",         theme_color2);
     }, []);
 
     const handleShareClick = () => {
@@ -47,7 +101,7 @@ const Layout = () => {
                 <div className={styles.headerContainer}>
                     <Stack horizontal verticalAlign="center">
                         <img
-                            src={Azure}
+                            src={logoHeaderURL}
                             className={styles.headerIcon}
                             aria-hidden="true"
                         />

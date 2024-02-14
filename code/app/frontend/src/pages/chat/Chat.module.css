@@ -44,7 +44,7 @@
     align-items: flex-end;
     text-align: center;
     line-height: 24px;
-    margin-top: 36px;
+    margin-top: 10px;
     margin-bottom: 0px;
 }
 
@@ -63,8 +63,10 @@
 }
 
 .chatIcon {
-    height: 62px;
-    width: 62px;
+    height: 84px;
+    width: 67px;
+    object-fit: cover;
+    object-position: -6px 0px;
 }
 
 .chatMessageStream {

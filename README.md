@@ -3,11 +3,11 @@
 ## GLB Modifications
 
 
-### Frontend .env file
-- Documentation: https://vitejs.dev/guide/env-and-mode.html
-- Uses the file `code/app/frontend/.env` to hold variables the Vite frontend can access.
-    1. Rename `example.env` to `.env` otherwise the variables will not be read.
-    2. The env variables *must* start with `VITE_` otherwise they will not be read, e.g. `VITE_MY_SECRET`.
+### Frontend Team Themes
+1. When building the Docker image, use the flag `--build-arg FRONTEND_TEAM=` with one of the following values:
+    - [data_management, data_science, process_dev, product_dev, regulatory]
+2. The env variables declared in the Dockerfile / used in React *must* start with `VITE_` [otherwise they will not be read,](https://vitejs.dev/guide/env-and-mode.html) (e.g. `VITE_MY_SECRET`)
+3. Themes for each team can be modified at `./code/app/frontend/src/pages/layout/Layout.tsx`
 
 
 

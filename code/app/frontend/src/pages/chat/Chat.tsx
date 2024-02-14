@@ -8,7 +8,6 @@ import rehypeRaw from "rehype-raw";
 import { v4 as uuidv4 } from "uuid";
 
 import styles from "./Chat.module.css";
-import Azure from "../../assets/Azure.svg";
 
 import {
     ChatMessage,
@@ -32,6 +31,14 @@ const Chat = () => {
     const [answers, setAnswers] = useState<ChatMessage[]>([]);
     const abortFuncs = useRef([] as AbortController[]);
     const [conversationId, setConversationId] = useState<string>(uuidv4());
+    const [logoFooterURL, setLogoFooterURL] = useState<string>('');
+
+
+    useEffect(() => {
+        const logo_footer_url = import.meta.env.VITE_GLB_LOGO_FOOTER_URL;
+        setLogoFooterURL(logo_footer_url)
+    }, []);
+
 
     const makeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
@@ -133,7 +140,7 @@ const Chat = () => {
                     {!lastQuestionRef.current ? (
                         <Stack className={styles.chatEmptyState}>
                             <img
-                                src={Azure}
+                                src={logoFooterURL}
                                 className={styles.chatIcon}
                                 aria-hidden="true"
                             />
@@ -198,7 +205,7 @@ const Chat = () => {
                         )}
                         <BroomRegular
                             className={styles.clearChatBroom}
-                            style={{ background: isLoading || answers.length === 0 ? "#BDBDBD" : "radial-gradient(109.81% 107.82% at 100.1% 90.19%, #0F6CBD 33.63%, #2D87C3 70.31%, #8DDDD8 100%)", 
+                            style={{ background: isLoading || answers.length === 0 ? "#BDBDBD" : "radial-gradient(109.81% 107.82% at 100.1% 90.19%, var(--gradient-color1) 33.63%, var(--gradient-color2) 70.31%, var(--gradient-color3) 100%)", 
                                      cursor: isLoading || answers.length === 0 ? "" : "pointer"}}
                             onClick={clearChat}
                             onKeyDown={e => e.key === "Enter" || e.key === " " ? clearChat() : null}

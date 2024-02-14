@@ -12,9 +12,22 @@ const Layout = () => {
     const [pageTitle, setPageTitle] = useState<string>('Default Title');
     const [logoHeaderURL, setLogoHeaderURL] = useState<string>('');
 
+    function setFavicon(url: string): void {
+        let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+        link.href = url;
+    }
+
     useEffect(() => {
+        const favicon_url = import.meta.env.VITE_FAVICON_URL;
+        setFavicon(favicon_url);
+
         const logo_header_url = import.meta.env.VITE_GLB_LOGO_HEADER_URL;
-        setLogoHeaderURL(logo_header_url)
+        setLogoHeaderURL(logo_header_url);
 
         const envTeam = import.meta.env.VITE_TEAM;
         let page_title;
@@ -71,7 +84,7 @@ const Layout = () => {
         document.documentElement.style.setProperty("--header-background-color", theme_color2);
         document.documentElement.style.setProperty("--gradient-color1",         theme_color4);
         document.documentElement.style.setProperty("--gradient-color2",         theme_color3);
-        document.documentElement.style.setProperty("--gradient-color3",         theme_color2);
+        document.documentElement.style.setProperty("--gradient-color3",         theme_color1);
     }, []);
 
     const handleShareClick = () => {

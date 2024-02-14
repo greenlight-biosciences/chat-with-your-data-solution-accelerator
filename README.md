@@ -9,6 +9,21 @@
 2. The env variables declared in the Dockerfile / used in React *must* start with `VITE_` [otherwise they will not be read,](https://vitejs.dev/guide/env-and-mode.html) (e.g. `VITE_MY_SECRET`)
 3. Themes for each team can be modified at `./code/app/frontend/src/pages/layout/Layout.tsx`
 
+#### Building Webapp
+```sh
+#!/bin/bash
+TEAM="data_management"
+IMAGE_NAME="gptwebapp_${TEAM}"
+
+docker build \
+    -f docker/WebApp.Dockerfile \
+    --build-arg FRONTEND_TEAM=${TEAM} \
+    --build-arg GLB_LOGO_HEADER_URL=<url here> \
+    --build-arg GLB_LOGO_FOOTER_URL=<url here> \
+    --build-arg FAVICON_URL=<url here> \
+    -t ${IMAGE_NAME} \
+    .
+```
 
 
 

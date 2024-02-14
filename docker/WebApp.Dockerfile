@@ -9,13 +9,15 @@ COPY --chown=node:node ./code/app/frontend ./frontend
 
 # Frontend envs must be passed in as build-args
 ARG FRONTEND_TEAM="default"
-ARG GLB_LOGO_HEADER_URL=""
-ARG GLB_LOGO_FOOTER_URL=""
+ARG GLB_LOGO_HEADER_URL
+ARG GLB_LOGO_FOOTER_URL
+ARG FAVICON_URL
 RUN printf "\
 \
 VITE_TEAM='${FRONTEND_TEAM}'\n\
 VITE_GLB_LOGO_HEADER_URL='${GLB_LOGO_HEADER_URL}'\n\
 VITE_GLB_LOGO_FOOTER_URL='${GLB_LOGO_FOOTER_URL}'\n\
+VITE_FAVICON_URL='${FAVICON_URL}'\n\
 \
 " > ./frontend/.env
 

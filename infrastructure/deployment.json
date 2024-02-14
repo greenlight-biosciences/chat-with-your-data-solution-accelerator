@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.23.1.45101",
-      "templateHash": "16453908494729395295"
+      "version": "0.25.53.49325",
+      "templateHash": "2059435571809702562"
     }
   },
   "parameters": {
@@ -320,11 +320,29 @@
       "metadata": {
         "description": "Blob Container Name - (Team Specific)"
       }
+    },
+    "logoURL": {
+      "type": "string",
+      "metadata": {
+        "description": "Logo URL"
+      }
+    },
+    "faviconURL": {
+      "type": "string",
+      "metadata": {
+        "description": "Favicon URL"
+      }
+    },
+    "configPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Config Password"
+      }
     }
   },
   "variables": {
-    "WebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/adminwebapp",
-    "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/gptwebapp",
+    "WebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/gptwebapp",
+    "AdminWebAppImageName": "DOCKER|glbdmcontainer.azurecr.io/adminwebapp",
     "BackendImageName": "DOCKER|glbdmcontainer.azurecr.io/gptbackend",
     "QueueName": "doc-processing",
     "ClientKey": "[format('{0}{1}', uniqueString(guid(resourceGroup().id, deployment().name)), parameters('newGuidString'))]",
@@ -537,6 +555,18 @@
             {
               "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
               "value": "[parameters('registryPassword')]"
+            },
+            {
+              "name": "LOGO_URL",
+              "value": "[parameters('logoURL')]"
+            },
+            {
+              "name": "FAVICON_URL",
+              "value": "[parameters('faviconURL')]"
+            },
+            {
+              "name": "CONFIG_PASSWORD",
+              "value": "[parameters('configPassword')]"
             }
           ],
           "linuxFxVersion": "[variables('WebAppImageName')]"
@@ -712,6 +742,18 @@
             {
               "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
               "value": "[parameters('registryPassword')]"
+            },
+            {
+              "name": "LOGO_URL",
+              "value": "[parameters('logoURL')]"
+            },
+            {
+              "name": "FAVICON_URL",
+              "value": "[parameters('faviconURL')]"
+            },
+            {
+              "name": "CONFIG_PASSWORD",
+              "value": "[parameters('configPassword')]"
             }
           ],
           "linuxFxVersion": "[variables('AdminWebAppImageName')]"

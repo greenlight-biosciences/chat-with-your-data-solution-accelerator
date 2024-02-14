@@ -149,6 +149,16 @@ param StorageAccountName string = '${ResourcePrefix}${TeamName}str'
 @description('Blob Container Name - (Team Specific)')
 param BlobContainerName string = '${ResourcePrefix}${TeamName}cnt'
 
+@description('Logo URL')
+param logoURL string
+
+@description('Favicon URL')
+param faviconURL string
+
+@secure()
+@description('Config Password')
+param configPassword string
+
 
 var WebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/gptwebapp'
 var AdminWebAppImageName = 'DOCKER|glbdmcontainer.azurecr.io/adminwebapp'
@@ -251,6 +261,9 @@ resource Website 'Microsoft.Web/sites@2020-06-01' = {
         { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
         { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
         { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
+        { name: 'LOGO_URL', value: logoURL}
+        { name: 'FAVICON_URL', value: faviconURL}
+        { name: 'CONFIG_PASSWORD', value: configPassword}
       ]
       linuxFxVersion: WebAppImageName
     }
@@ -306,6 +319,9 @@ resource WebsiteName_admin 'Microsoft.Web/sites@2020-06-01' = {
         { name: 'DOCKER_REGISTRY_SERVER_URL', value: registryUrl}
         { name: 'DOCKER_REGISTRY_SERVER_USERNAME',value: registryUsername}
         { name: 'DOCKER_REGISTRY_SERVER_PASSWORD', value: registryPassword}
+        { name: 'LOGO_URL', value: logoURL}
+        { name: 'FAVICON_URL', value: faviconURL}
+        { name: 'CONFIG_PASSWORD', value: configPassword}
       ]
       linuxFxVersion: AdminWebAppImageName
     }

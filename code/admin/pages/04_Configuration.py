@@ -1,6 +1,5 @@
 import streamlit as st
 import os
-import json
 import traceback
 import logging
 from dotenv import load_dotenv
@@ -8,6 +7,8 @@ import sys
 from getImageFromURL import getImageFromURL
 # sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utilities.helpers.ConfigHelper import ConfigHelper
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 load_dotenv()
 

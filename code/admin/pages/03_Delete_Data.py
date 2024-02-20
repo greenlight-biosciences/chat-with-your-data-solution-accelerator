@@ -3,7 +3,7 @@ import os
 import traceback
 import logging
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from utilities.helpers.AzureSearchHelper import AzureSearchHelper
 from dotenv import load_dotenv
 from getImageFromURL import getImageFromURL
@@ -32,8 +32,10 @@ hide_table_row_index = """
 # Inject CSS with Markdown
 st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
+
 def get_files():
     return search_client.search("*", select="id, title", include_total_count=True)
+
 
 def output_results(results):
     files = {}
@@ -44,8 +46,8 @@ def output_results(results):
         st.write("Select files to delete:")
 
     for result in results:
-        id = result['id']
-        filename = result['title']
+        id = result["id"]
+        filename = result["title"]
         if filename in files:
             files[filename].append(id)
         else:
@@ -58,22 +60,23 @@ def output_results(results):
 def delete_files(files):
     ids_to_delete = []
     files_to_delete = []
-    
+
     for filename, ids in files.items():
         if st.session_state[filename]:
             files_to_delete.append(filename)
-            ids_to_delete += [{'id': id} for id in ids]
+            ids_to_delete += [{"id": id} for id in ids]
 
     if len(ids_to_delete) == 0:
         st.info("No files selected")
         st.stop()
-    
+
     search_client.delete_documents(ids_to_delete)
 
-    st.success('Deleted files: ' + str(files_to_delete))
+    st.success("Deleted files: " + str(files_to_delete))
+
 
 try:
-    vector_store_helper : AzureSearchHelper = AzureSearchHelper()
+    vector_store_helper: AzureSearchHelper = AzureSearchHelper()
     search_client = vector_store_helper.get_vector_store().client
 
     results = get_files()
@@ -83,5 +86,5 @@ try:
         with st.spinner("Deleting files..."):
             delete_files(files)
 
-except Exception as e:
+except Exception:
     st.error(traceback.format_exc())

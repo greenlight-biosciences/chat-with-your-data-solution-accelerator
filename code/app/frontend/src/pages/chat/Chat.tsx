@@ -369,7 +369,7 @@ const Chat = () => {
                 background:
                   isLoading || answers.length === 0
                     ? "#BDBDBD"
-                    : "radial-gradient(109.81% 107.82% at 100.1% 90.19%, #0F6CBD 33.63%, #2D87C3 70.31%, #8DDDD8 100%)",
+                    : "radial-gradient(109.81% 107.82% at 100.1% 90.19%, var(--gradient-color1) 33.63%, var(--gradient-color2) 70.31%, var(--gradient-color3) 100%)",
                 cursor: isLoading || answers.length === 0 ? "" : "pointer",
               }}
               onClick={clearChat}

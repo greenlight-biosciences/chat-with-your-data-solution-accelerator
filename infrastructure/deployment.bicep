@@ -17,24 +17,17 @@ param HostingPlanName string = '${ResourcePrefix}-hosting-plan'
   'B1'
   'B2'
   'B3'
-  'S1'
-  'S2'
-  'S3'
-  'P1'
-  'P2'
-  'P3'
-  'P4'
 ])
-param HostingPlanSku string = 'B3'
+param HostingPlanSku string = 'B1'
 
 @description('Name of Web App')
 param WebsiteName string = '${ResourcePrefix}-${TeamName}'
 
 @description('Name of Log Analytics Workspace for App Insights')
-param logAnalyticsWorkspaceName string = '${ResourcePrefix}-loganalytics'
+param logAnalyticsWorkspaceName string = '${WebsiteName}-loganalytics'
 
 @description('Name of Application Insights')
-param ApplicationInsightsName string = '${ResourcePrefix}-appinsights'
+param ApplicationInsightsName string = '${WebsiteName}-appinsights'
 
 @description('Use semantic search')
 param AzureSearchUseSemanticSearch string = 'true'
@@ -115,22 +108,22 @@ param AzureCognitiveSearch string
 param AzureCognitiveSearchKey string
 
 @description('Azure AI Search Index')
-param AzureSearchIndex string = '${ResourcePrefix}-index'
+param AzureSearchIndex string = '${WebsiteName}-index'
 
 @description('Azure AI Search Conversation Log Index')
 param AzureSearchConversationLogIndex string = 'conversations'
 
 @description('Name of Function App for Batch document processing')
-param FunctionName string = '${ResourcePrefix}-backend'
+param FunctionName string = '${WebsiteName}-backend'
 
 @description('Azure Form Recognizer Name')
-param FormRecognizerName string = '${ResourcePrefix}-formrecog'
+param FormRecognizerName string = '${WebsiteName}-formrecog'
 
 @description('Azure Form Recognizer Location')
 param FormRecognizerLocation string
 
 @description('Azure Content Safety Name')
-param ContentSafetyName string = '${ResourcePrefix}-contentsafety'
+param ContentSafetyName string = '${WebsiteName}-contentsafety'
 param newGuidString string = newGuid()
 
 @description('Container registry Url')

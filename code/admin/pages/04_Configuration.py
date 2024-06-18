@@ -4,12 +4,29 @@ import json
 import traceback
 import logging
 from dotenv import load_dotenv
-import sys
+import urllib, requests
 from getImageFromURL import getImageFromURL
 # sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utilities.helpers.ConfigHelper import ConfigHelper
 
 load_dotenv()
+
+def remote_convert_files_and_add_embeddings(process_all=False):
+    backend_url = urllib.parse.urljoin(os.getenv('BACKEND_URL','http://localhost:7071'), "/api/BatchStartProcessing")
+    params = {}
+    if os.getenv('FUNCTION_KEY') != None:
+        params['code'] = os.getenv('FUNCTION_KEY')
+        params['clientId'] = "clientKey"
+    if process_all:
+        params['process_all'] = "true"
+    try:
+        response = requests.post(backend_url, params=params)
+        if response.status_code == 200:
+            st.success(f"{response.text}\nPlease note this is an asynchronous process and may take a few minutes to complete.")
+        else:
+            st.error(f"Error: {response.text}")
+    except Exception as e:
+        st.error(traceback.format_exc())
 
 logger = logging.getLogger('azure.core.pipeline.policies.http_logging_policy').setLevel(logging.WARNING)
 # st.set_page_config(page_title="Configure Prompts", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
@@ -81,6 +98,8 @@ if input_password == os.getenv('CONFIG_PASSWORD'):
             st.warning("Your post answering prompt doesn't contain the variable `{answer}`")
 
     try:  
+        with st.expander("Reprocess all documents in the Azure Storage account", expanded=True):
+            st.button("Reprocess all documents in the Azure Storage account", on_click=remote_convert_files_and_add_embeddings, args=(True,))
         with st.expander("Orchestrator configuration", expanded=True):
             cols = st.columns([2,4])
             with cols[0]:

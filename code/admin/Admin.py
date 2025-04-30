@@ -11,6 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 logger = logging.getLogger('azure.core.pipeline.policies.http_logging_policy').setLevel(logging.WARNING)
 
 
+logging.info(f"LOGO_URL: {os.getenv('FAVICON_URL')}")
 
 # st.set_page_config(page_title="Admin", page_icon=os.path.join('images','favicon.ico'), layout="wide", menu_items=None)
 st.set_page_config(page_title="Admin", page_icon=getImageFromURL(os.getenv('FAVICON_URL')), layout="wide", menu_items=None)
@@ -28,7 +29,16 @@ st.markdown(mod_page_style, unsafe_allow_html=True)
 col1, col2, col3 = st.columns([1,2,1])
 with col1:
     # st.image(os.path.join('images','logo.png'))
-    st.image(getImageFromURL(os.getenv('LOGO_URL')))
+    # st.image(getImageFromURL(os.getenv('LOGO_URL')))
+    # Ensure LOGO_URL is retrieved from getImageFromURL function
+    logo_url = os.getenv('LOGO_URL')
+    image = getImageFromURL(logo_url)
+    if image:
+        st.image(image)
+    else:
+        st.error("Failed to retrieve the logo.")
+    
+
     
 st.write("# Chat with your data Solution Accelerator")
 

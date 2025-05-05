@@ -28,23 +28,6 @@ mod_page_style = """
             </style>
             """
 st.markdown(mod_page_style, unsafe_allow_html=True)
-    
-def remote_convert_files_and_add_embeddings(process_all=False):
-    backend_url = urllib.parse.urljoin(os.getenv('BACKEND_URL','http://localhost:7071'), "/api/BatchStartProcessing")
-    params = {}
-    if os.getenv('FUNCTION_KEY') != None:
-        params['code'] = os.getenv('FUNCTION_KEY')
-        params['clientId'] = "clientKey"
-    if process_all:
-        params['process_all'] = "true"
-    try:
-        response = requests.post(backend_url, params=params)
-        if response.status_code == 200:
-            st.success(f"{response.text}\nPlease note this is an asynchronous process and may take a few minutes to complete.")
-        else:
-            st.error(f"Error: {response.text}")
-    except Exception as e:
-        st.error(traceback.format_exc())
 
 def add_urls():
     params = {}
@@ -100,11 +83,9 @@ try:
             if len(uploaded_files) > 0:
                 st.success(f"{len(uploaded_files)} documents uploaded. Embeddings computation in progress. \nPlease note this is an asynchronous process and may take a few minutes to complete.\nYou can check for further details in the Azure Function logs.")
 
-        col1, col2, col3 = st.columns([2,1,2])
+        col1, col2 = st.columns([2,1])
         # with col1:
         #     st.button("Process and ingest new files", on_click=remote_convert_files_and_add_embeddings)
-        with col3:
-            st.button("Reprocess all documents in the Azure Storage account", on_click=remote_convert_files_and_add_embeddings, args=(True,))
 
     with st.expander("Add URLs to the knowledge base", expanded=True):
         col1, col2 = st.columns([3,1])
